@@ -1,0 +1,119 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+enum Role {
+  ROLE_USER
+  ROLE_ADMIN
+}
+
+enum FeedbackStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum FeedbackCategory {
+  BUG
+  FEATURE_REQUEST
+  UX
+  PERFORMANCE
+  OTHER
+}
+
+type User {
+  id: ID!
+  username: String!
+  email: String!
+  roles: [Role!]!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Feedback {
+  id: ID!
+  title: String!
+  message: String!
+  status: FeedbackStatus!
+  category: FeedbackCategory!
+  rating: Int
+  author: User!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type FeedbackResponse {
+  id: ID!
+  message: String!
+  author: User!
+  feedbackId: ID!
+  createdAt: String!
+}
+
+type PageInfo {
+  page: Int!
+  size: Int!
+  totalElements: Int!
+  totalPages: Int!
+}
+
+type FeedbackPage {
+  items: [Feedback!]!
+  pageInfo: PageInfo!
+}
+
+input RegisterRequest {
+  username: String!
+  email: String!
+  password: String!
+}
+
+input LoginRequest {
+  username: String!
+  password: String!
+}
+
+type AuthResponse {
+  token: String!
+  user: User!
+}
+
+input CreateFeedbackInput {
+  title: String!
+  message: String!
+  category: FeedbackCategory
+  rating: Int
+}
+
+input FeedbackFilter {
+  status: FeedbackStatus
+  category: FeedbackCategory
+  searchText: String
+}
+
+input UpdateFeedbackStatusInput {
+  feedbackId: ID!
+  status: FeedbackStatus!
+}
+
+input AddFeedbackResponseInput {
+  feedbackId: ID!
+  message: String!
+}
+
+type Query {
+  feedbacks(page: Int!, size: Int!, filter: FeedbackFilter): FeedbackPage!
+  myFeedbacks(page: Int!, size: Int!, filter: FeedbackFilter): FeedbackPage!
+  me: User
+}
+
+type Mutation {
+  register(input: RegisterRequest!): AuthResponse!
+  login(input: LoginRequest!): AuthResponse!
+  createFeedback(input: CreateFeedbackInput!): Feedback!
+  updateFeedbackStatus(input: UpdateFeedbackStatusInput!): Feedback!
+  addFeedbackResponse(input: AddFeedbackResponseInput!): FeedbackResponse!
+}
+

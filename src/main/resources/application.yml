@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: feedback-api
+
+  datasource:
+    url: jdbc:h2:mem:feedback;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  graphql:
+    path: /graphql
+    graphiql:
+      enabled: true
+
+app:
+  security:
+    jwt:
+      secret: "change-this-secret-in-prod-very-long-and-random"
+      expiration-ms: 86400000 # 24h
+
+server:
+  port: 8080
+
+logging:
+  level:
+    org.springframework.security: INFO
+    org.hibernate.SQL: DEBUG
+
